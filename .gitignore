@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+uploads/
+resultados/
+
+*.pyc
+*.xlsx
+*.xls
+*.csv
