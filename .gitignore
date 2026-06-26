@@ -1,9 +1,9 @@
-venv/
-__pycache__/
-uploads/
-resultados/
+# Nunca subir o arquivo de senhas para o GitHub
+.streamlit/secrets.toml
 
+# Arquivos do Python
+__pycache__/
 *.pyc
-*.xlsx
-*.xls
-*.csv
+
+# Ambiente virtual
+venv/
