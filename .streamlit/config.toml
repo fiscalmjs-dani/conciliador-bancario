@@ -1,9 +1,7 @@
 [server]
-port = 8501
-address = "localhost"
-headless = false
+headless = true
+enableCORS = false
+enableXsrfProtection = false
 
 [browser]
 gatherUsageStats = false
-serverAddress = "localhost"
-serverPort = 8501
