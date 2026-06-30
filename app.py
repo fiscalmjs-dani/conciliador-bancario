@@ -5,6 +5,7 @@ import hmac
 
 from conciliador import detect_columns, load_sheet, conciliar, resumo
 from exportar import exportar_excel, exportar_csv_erp
+from exportar_pdf import exportar_pdf
 
 # ─── Configuração da página ───────────────────────────────────────────────────
 st.set_page_config(
@@ -166,6 +167,7 @@ def _init():
         "raw_erp":   None,
         "df_result": None,
         "resumo":    None,
+        "resultado_completo": None,
     }
     for k, v in defaults.items():
         if k not in st.session_state:
@@ -391,6 +393,7 @@ def etapa_criterios():
                 )
                 S.df_result = result_dict["resultado"]
                 S.resumo    = result_dict["resumo"]
+                S.resultado_completo = result_dict
             S.step = 3; st.rerun()
 
 
@@ -527,7 +530,7 @@ def etapa_exportar():
     st.markdown(f"Conciliação concluída: **{r['conciliados']} conciliados**, "
                 f"**{r['divergentes']} divergentes**, **{r['nao_conciliados']} não conciliados**.")
 
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
         st.markdown("#### 📊 Excel completo")
@@ -569,6 +572,19 @@ def etapa_exportar():
             )
         except Exception as e:
             st.error(f"Erro ao gerar CSV: {e}")
+
+    with col4:
+        st.markdown("#### 📄 Relatório PDF")
+        st.caption("Relatório executivo completo com métricas e tabelas")
+        try:
+            pdf_bytes = exportar_pdf(S.resultado_completo)
+            st.download_button(
+                "⬇ Baixar PDF", data=pdf_bytes,
+                file_name="relatorio_conciliacao.pdf",
+                mime="application/pdf", use_container_width=True, type="primary",
+            )
+        except Exception as e:
+            st.error(f"Erro ao gerar PDF: {e}")
 
     st.divider()
     st.markdown("#### 💰 Resumo Financeiro")
